@@ -25,6 +25,7 @@ const Stock = require('./models/stock');
 
 app.get('/stocks', getStocks);
 app.delete('/stocks/:id', deleteStock);
+app.get('/price', getPrice);
 
 function getStocks (req, res) {
   Stock.find( req.query.ticker ? {ticker: req.query.ticker} : {})
@@ -33,11 +34,19 @@ function getStocks (req, res) {
 
 function deleteStock (req, res) {
   Stock.findByIdAndDelete({ _id: req.params.id })
-    .then((stock) => res.status(200).send('deleted '+stock.ticker));
+    .then((stock) => res.send('deleted '+stock.ticker));
+}
+
+const axios = require('axios');
+function getPrice(req, res) {
+  let ticker = req.query.ticker;
+  let url = `https://api.polygon.io/v2/aggs/ticker/${ticker}/prev?apiKey=${process.env.PRICE_KEY}`;
+  axios.get(url)
+    .then((pData) => res.send(`${pData.data.results[0].c}`));
 }
 
 app.get('*', (req, res) => {
-  res.status(404).send('Endpoint not found, please check your intended url');
+  res.send('Endpoint not found, please check your intended url');
 });
 
 app.listen(PORT, ()=> console.log('Server listening on '+PORT) );
