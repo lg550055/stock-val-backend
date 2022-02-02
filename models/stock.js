@@ -5,12 +5,15 @@ const { Schema } = mongoose;
 
 const stockSchema = new Schema({
   ticker: { type: String, uppercase: true, trim: true },
-  fy2022: {
+  price: Number,
+  priceDate: Date,
+  fy2021: {
     revenue: Number,
     ebitda: Number,
     capex: Number,
     cash: Number,
-    debt: Number
+    debt: Number,
+    shares: Number
   }
 });
 

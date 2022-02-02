@@ -6,10 +6,10 @@ require('dotenv').config();
 
 const app = express();
 app.use(cors());
+app.use(express.json());
 
 const mongoose = require('mongoose');
 mongoose.connect(process.env.DB_URL);
-
 // connection validation
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
@@ -19,30 +19,39 @@ db.once('open', function(){
 
 const PORT = process.env.PORT;
 
-app.get('/', (req, res)=> res.send('Server here!'));
-
 const Stock = require('./models/stock');
 
+app.get('/', (req, res)=> res.send('Server here!'));
 app.get('/stocks', getStocks);
+app.post('/stocks', addStock);
 app.delete('/stocks/:id', deleteStock);
 app.get('/price', getPrice);
 
 function getStocks (req, res) {
   Stock.find( req.query.ticker ? {ticker: req.query.ticker} : {})
-    .then((stocks) => res.send(stocks));
+    .then(stocks => res.send(stocks));
+}
+
+async function addStock (req, res) {
+  try {
+    const stockAdded = await Stock.create(req.body);
+    res.status(200).send(stockAdded);
+  } catch (err) {
+    res.status(500).send('Server error '+err);
+  }
 }
 
 function deleteStock (req, res) {
   Stock.findByIdAndDelete({ _id: req.params.id })
-    .then((stock) => res.send('deleted '+stock.ticker));
+    .then(stock => res.send('deleted '+stock.ticker));
 }
 
 const axios = require('axios');
-function getPrice(req, res) {
+async function getPrice(req, res) {
   let ticker = req.query.ticker;
-  let url = `https://api.polygon.io/v2/aggs/ticker/${ticker}/prev?apiKey=${process.env.PRICE_KEY}`;
-  axios.get(url)
-    .then((pData) => res.send(`${pData.data.results[0].c}`));
+  let url = `https://finnhub.io/api/v1/quote?token=${process.env.PRICE_KEY}&symbol=${ticker}`;
+  let p = await axios.get(url);
+  res.send(`${p.data.c}`);
 }
 
 app.get('*', (req, res) => {
