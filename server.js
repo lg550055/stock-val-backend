@@ -3,6 +3,7 @@
 const express = require('express');
 const cors = require('cors');
 require('dotenv').config();
+const axios = require('axios');
 
 const app = express();
 app.use(cors());
@@ -46,7 +47,6 @@ function deleteStock (req, res) {
     .then(stock => res.send('deleted '+stock.ticker));
 }
 
-const axios = require('axios');
 async function getPrice(req, res) {
   let ticker = req.query.ticker;
   let url = `https://finnhub.io/api/v1/quote?token=${process.env.PRICE_KEY}&symbol=${ticker}`;
