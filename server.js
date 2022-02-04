@@ -21,6 +21,7 @@ db.once('open', function(){
 const PORT = process.env.PORT;
 
 const Stock = require('./models/stock');
+const finInfo = require('./finfo');
 
 app.get('/', (req, res)=> res.send('Server here!'));
 app.get('/stocks', getStocks);
@@ -35,7 +36,8 @@ function getStocks (req, res) {
 
 async function addStock (req, res) {
   try {
-    const stockAdded = await Stock.create(req.body);
+    const stock = await finInfo(req.query.ticker);
+    const stockAdded = await Stock.create(stock);
     res.status(200).send(stockAdded);
   } catch (err) {
     res.status(500).send('Server error '+err);
