@@ -4,7 +4,7 @@ const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
 const stockSchema = new Schema({
-  ticker: { type: String, uppercase: true, trim: true },
+  ticker: { type: String, trim: true },
   endDate: Date,
   shares: Number,
   cash: Number,

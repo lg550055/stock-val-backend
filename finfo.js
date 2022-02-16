@@ -1,24 +1,29 @@
 'use strict';
+// this module obtains financial information from SEC filings for a given stock
 
 const axios = require('axios');
 
+// not all companies use the same tags to identify their financial information, thus the need to have multiple tags for the same financial metric
 const key = {
   s: ['WeightedAverageNumberOfDilutedSharesOutstanding'],
-  c: ['CashAndCashEquivalentsAtCarryingValue','MarketableSecuritiesCurrent','ShortTermInvestments','CashCashEquivalentsAndShortTermInvestments','AvailableForSaleSecuritiesNoncurrent'],
-  dst: ['DebtCurrent','ShortTermBorrowings','LongTermDebtAndCapitalLeaseObligationsCurrent','LongTermDebtCurrent'],
-  dlt: ['LongTermDebtNoncurrent','LongTermDebtAndCapitalLeaseObligations'],
+  c: ['CashAndCashEquivalentsAtCarryingValue','MarketableSecuritiesCurrent','ShortTermInvestments','CashCashEquivalentsAndShortTermInvestments','AvailableForSaleSecuritiesNoncurrent','MarketableSecuritiesNoncurrent','CashCashEquivalentsRestrictedCashAndRestrictedCashEquivalents','AvailableForSaleSecuritiesDebtSecuritiesCurrent','AvailableForSaleSecuritiesDebtSecuritiesNoncurrent'],
+  dst: ['DebtCurrent','ShortTermBorrowings','CommercialPaper','UnsecuredDebtCurrent','LongTermDebtAndCapitalLeaseObligationsCurrent','LongTermDebtCurrent'],
+  dlt: ['LongTermDebt','LongTermDebtNoncurrent','UnsecuredLongTermDebt','LongTermDebtAndCapitalLeaseObligations','LongTermNotesPayable'],
   r: ['Revenues','RevenueFromContractWithCustomerExcludingAssessedTax'],
   gp: ['GrossProfit'],
   o: ['OperatingIncomeLoss'],
+  dna: ['Depreciation','DepreciationAndAmortization','DepreciationDepletionAndAmortization','DepreciationAmortizationAndAccretionNet','OtherDepreciationAndAmortization','AmortizationOfIntangibleAssets','AssetImpairmentCharges','ResearchAndDevelopmentAssetAcquiredOtherThanThroughBusinessCombinationWrittenOff','Amortizationofintangibleandrightofuseassets','ImpairmentOfIntangibleAssetsExcludingGoodwill','ResearchAndDevelopmentInProcess'],
   cfo: ['NetCashProvidedByUsedInOperatingActivities'],
-  cpx: ['PaymentsToAcquireProductiveAssets','PaymentsToAcquirePropertyPlantAndEquipment']
+  cpx: ['PaymentsToAcquireProductiveAssets','PaymentsToAcquirePropertyPlantAndEquipment','PaymentsToAcquireOtherPropertyPlantAndEquipment']
 };
 
 async function getFinInfo (symbol) {
+  // freq=quarterly (10q) or default annual (10k)
   let url = 'https://finnhub.io/api/v1/stock/financials-reported?token=c7talcqad3i8dq4tunfg&symbol='+symbol;
   let tData = await axios.get(url);
   tData = tData.data.data[0];
 
+  // returns object to store in database or pass to frontend
   return {
     ticker: tData.symbol,
     endDate: tData.endDate,

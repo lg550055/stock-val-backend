@@ -1,5 +1,6 @@
 'use strict';
 
+// module imports and instatiation
 const express = require('express');
 const cors = require('cors');
 require('dotenv').config();
@@ -11,6 +12,7 @@ app.use(express.json());
 
 const mongoose = require('mongoose');
 mongoose.connect(process.env.DB_URL);
+
 // connection validation
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
@@ -23,6 +25,7 @@ const PORT = process.env.PORT;
 const Stock = require('./models/stock');
 const finInfo = require('./finfo');
 
+// server routes
 app.get('/', (req, res)=> res.send('Server here!'));
 app.get('/stocks', getStocks);
 app.post('/stocks', addStock);
@@ -31,7 +34,7 @@ app.get('/price', getPrice);
 
 function getStocks (req, res) {
   Stock.find( req.query.ticker ? {ticker: req.query.ticker} : {})
-    .then(stocks => res.send(stocks));
+    .then(stocks => res.status(200).send(stocks));
 }
 
 async function addStock (req, res) {
@@ -56,8 +59,10 @@ async function getPrice(req, res) {
   res.send(`${p.data.c}`);
 }
 
+// catch-all route
 app.get('*', (req, res) => {
   res.send('Endpoint not found, please check your intended url');
 });
 
+// activate server
 app.listen(PORT, ()=> console.log('Server listening on '+PORT) );
