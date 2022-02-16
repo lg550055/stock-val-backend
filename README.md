@@ -11,8 +11,9 @@ Provides price and financial information of a group of stocks to allow the front
 Most financial websites provide valuations based on p/e (price to earnings).  While a decent proxy, p/e has important limitations.  For example, it mostly ignores the capital structure of the business and is distorted by non-cash items.  Most sophisticaded investors use total enterprise value to ebitda or ebitda minus capex.  This method, which is what we use in this app, fully captures the capital sturcture of the business and avoids distortions caused by non-cash items.  We believe it would be helpful to have a these metrics available on a website.
 
 ## Getting Started
-Dependencies on package.json
-Use <npm install> to install dependencies 
+- Dependencies on package.json
+- Use `npm install` to install dependencies
+- Then `npm start` to run
 
 ## Architecture
 Node express server with a MongoDB able to make axios calls to external APIs to retrieve updated price and financial information.
