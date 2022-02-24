@@ -5,13 +5,18 @@
 **Version**: 1.0.0
 
 ## Overview
-Provides price and financial information for a group of stocks to allow the frontend app to build a meaningful valuation comparison for the relevant stocks.
+Provides price and financial information of a group of stocks to allow the frontend app to build a simple but meaningful valuation comparison for the relevant stocks.
+
+## Motivation
+Most financial websites provide valuations based on p/e (price to earnings).  While a decent proxy, p/e has important limitations.  For example, it mostly ignores the capital structure of the business and is distorted by non-cash items.  Most sophisticaded investors use total enterprise value to ebitda or ebitda minus capex.  This method, which is what we use in this app, fully captures the capital sturcture of the business and avoids distortions caused by non-cash items.  We believe it would be helpful to have a these metrics available on a website.
 
 ## Getting Started
-Dependencies on package.json (may use npm install / build)
+- Dependencies on package.json
+- Use `npm install` to install dependencies
+- Then `npm start` to run
 
 ## Architecture
-Node express server with a MongoDB ablte to make axios calls to external APIs to retrieve updated price and financial information.
+Node express server with a MongoDB able to make axios calls to external APIs to retrieve updated price and financial information.
 
 [Domain model](./domainModel.jpg)
 
@@ -19,16 +24,21 @@ Node express server with a MongoDB ablte to make axios calls to external APIs to
 
 **User profile**
 - email: String,
-- watchlist: [String]
+- watchlist: [ String ]
 
 **Stock**
-- ticker: String,
-- fy2021: { rev: Number, ebitda: Number, capex: Number, cash: Number, debt: Number},
-- fy2020: { rev: Number, ebitda: Number, capex: Number, cash: Number, debt: Number},
-- fy2019: { rev: Number, ebitda: Number, capex: Number, cash: Number, debt: Number}
-
-## Change Log
-2.1.2022 - Initial commit: set up, get and delete routes, connection to external API, initial README
+- ticker - stock symbol
+*Most recent data*
+- shares - diluted shares outstanding
+- cash - cash and marketable securities
+- debt - total debt
+- endData - date of most recent financial data
+*Most recent FY financials*
+  - revenue
+  - gross profit
+  - ebitda
+  - cash from operations
+  - capex
 
 ## Credit and Collaborations
 - Ryan Gallaway - instructor

@@ -1,7 +1,9 @@
 'use strict';
+// this module obtains financial information from SEC filings for a given stock
 
 const axios = require('axios');
 
+// not all companies use the same tags to identify their financial information, thus the need to have multiple tags for the same financial metric
 const items = {
   shrs: ['WeightedAverageNumberOfDilutedSharesOutstanding'],
   cash: ['CashAndCashEquivalentsAtCarryingValue','MarketableSecuritiesCurrent','ShortTermInvestments','CashCashEquivalentsAndShortTermInvestments','AvailableForSaleSecuritiesNoncurrent','MarketableSecuritiesNoncurrent','CashCashEquivalentsRestrictedCashAndRestrictedCashEquivalents','AvailableForSaleSecuritiesDebtSecuritiesCurrent','AvailableForSaleSecuritiesDebtSecuritiesNoncurrent','CashCashEquivalentsRestrictedCashAndRestrictedCashEquivalentsIncludingDisposalGroupAndDiscontinuedOperations','DebtSecuritiesAvailableForSaleExcludingAccruedInterestCurrent'],
@@ -14,6 +16,7 @@ const items = {
 };
 
 async function getInfo (symbol) {
+  // freq=quarterly (10q) or default annual (10k)
   let url = 'https://finnhub.io/api/v1/stock/financials-reported?token=c7talcqad3i8dq4tunfg&symbol='+symbol;
   let tData = await axios.get(url);
   tData = tData.data.data[0];
@@ -28,6 +31,7 @@ async function getInfo (symbol) {
     return tot;
   }
 
+  // returns object to store in database or pass to frontend
   return {
     ticker: tData.symbol,
     endDate: tData.endDate,
