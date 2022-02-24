@@ -5,8 +5,10 @@ const { Schema } = mongoose;
 
 const stockSchema = new Schema({
   ticker: String,
-  endDate: Date,
+  cik: String,
   shares: Number,
+  soDate: String,
+  endDate: Date,
   cash: Number,
   debt: Number,
   annual: [{

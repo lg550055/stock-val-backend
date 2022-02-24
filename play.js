@@ -12,9 +12,16 @@ const items = {
 };
 
 async function getInfo (symbol) {
-  let url = 'https://finnhub.io/api/v1/stock/financials-reported?token=c7talcqad3i8dq4tunfg&symbol='+symbol;
+  const url = 'https://finnhub.io/api/v1/stock/financials-reported?token=c7talcqad3i8dq4tunfg&symbol='+symbol;
   let tData = await axios.get(url);
   tData = tData.data.data[0];
+
+  const cik = tData.accessNumber.slice(0,10);
+  const shrsUrl = `https://data.sec.gov/api/xbrl/companyconcept/CIK${cik}/dei/EntityCommonStockSharesOutstanding.json`;
+  let sData = await axios.get(shrsUrl);
+  sData = sData.data.units.shares[sData.data.units.shares.length - 1];
+  const shrsOuts = sData.val/1e9;
+  const soDate = sData.end;
 
   function extract(stmt, item) {
     let arr = tData.report[stmt].filter(e => items[item].includes(e.concept));
@@ -28,8 +35,10 @@ async function getInfo (symbol) {
 
   let obj = {
     ticker: tData.symbol,
+    cik: cik,
+    shares: shrsOuts,
+    soDate: soDate,
     endDate: tData.endDate,
-    shares: extract('ic', 'shrs'),
     cash: extract('bs', 'cash'),
     debt: extract('bs', 'debt'),
     annual: [{
@@ -43,7 +52,7 @@ async function getInfo (symbol) {
     }]
   };
 
-  return console.log(obj);
+  return console.log(obj.shares, typeof obj.cik);
 }
 
-getInfo('hon');
+getInfo('amgn');
