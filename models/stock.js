@@ -12,7 +12,7 @@ const stockSchema = new Schema({
   annual: [{
     fy: Number,
     endDate: Date,
-    revenue: Number,
+    rev: Number,
     ebit: Number,
     da: Number,
     cfo: Number,
