@@ -1,5 +1,3 @@
-'use strict';
-
 const axios = require('axios');
 
 const items = {
@@ -28,7 +26,7 @@ async function getInfo (symbol) {
     return tot;
   }
 
-  return {
+  let obj = {
     ticker: tData.symbol,
     endDate: tData.endDate,
     shares: extract('ic', 'shrs'),
@@ -44,6 +42,8 @@ async function getInfo (symbol) {
       capex: extract('cf', 'capex')
     }]
   };
+
+  return console.log(obj);
 }
 
-module.exports = getInfo;
+getInfo('hon');

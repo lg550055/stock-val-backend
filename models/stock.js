@@ -4,16 +4,17 @@ const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
 const stockSchema = new Schema({
-  ticker: { type: String, uppercase: true, trim: true },
+  ticker: String,
   endDate: Date,
   shares: Number,
   cash: Number,
   debt: Number,
-  kItems: [{
+  annual: [{
+    fy: Number,
     endDate: Date,
     revenue: Number,
-    gprofit: Number,
-    ebitda: Number,
+    ebit: Number,
+    da: Number,
     cfo: Number,
     capex: Number,
   }]
