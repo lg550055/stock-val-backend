@@ -5,7 +5,7 @@
 **Version**: 1.0.0
 
 ## Overview
-Provides price and financial information of a group of stocks to allow the frontend app to build a simple but meaningful valuation comparison for the relevant stocks.
+Provides price and financial information of a group of stocks.  This information helps the frontend app build a simple but meaningful valuation comparison for the selected stocks.
 
 ## Motivation
 Most financial websites provide valuations based on p/e (price to earnings).  While a decent proxy, p/e has important limitations.  For example, it mostly ignores the capital structure of the business and is distorted by non-cash items.  Most sophisticaded investors use total enterprise value to ebitda or ebitda minus capex.  This method, which is what we use in this app, fully captures the capital sturcture of the business and avoids distortions caused by non-cash items.  We believe it would be helpful to have these metrics available on a website.

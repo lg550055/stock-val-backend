@@ -43,7 +43,7 @@ async function addStock (req, res) {
     const stockAdded = await Stock.create(stock);
     res.status(200).send(stockAdded);
   } catch (err) {
-    res.status(500).send('Server error '+err);
+    res.status(500).send('Server '+err);
   }
 }
 

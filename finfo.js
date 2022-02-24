@@ -21,29 +21,30 @@ async function getInfo (symbol) {
   let tData = await axios.get(url);
   tData = tData.data.data[0];
 
-  const cik = tData.accessNumber.slice(0,10);
-  const shrsUrl = `https://data.sec.gov/api/xbrl/companyconcept/CIK${cik}/dei/EntityCommonStockSharesOutstanding.json`;
-  let sData = await axios.get(shrsUrl);
-  sData = sData.data.units.shares[sData.data.units.shares.length - 1];
-  const shrsOuts = sData.val/1e9;
-  const soDate = sData.end;
+  // const cik = tData.accessNumber.slice(0,10);
+  // const shrsUrl = `https://data.sec.gov/api/xbrl/companyconcept/CIK${cik}/dei/EntityCommonStockSharesOutstanding.json`;
+  // let sData = await axios.get(shrsUrl);
+  // sData = sData.data.units.shares[sData.data.units.shares.length - 1];
+  // const shrsOuts = sData.val/1e9;
+  // const soDate = sData.end;
 
   function extract(stmt, item) {
     let arr = tData.report[stmt].filter(e => items[item].includes(e.concept));
     let uniques = [...new Map(arr.map(e => [e.concept, e])).values()];
-    let tot = 0;
+    let v = 0;
     uniques.forEach(i => {
-      tot += isNaN(i.value/1e9) ? 0 : i.value/1e9;
+      v += isNaN(i.value/1e9) ? 0 : i.value/1e9;
     });
-    return tot;
+    return v;
   }
 
   // returns object to store in database or pass to frontend
   return {
     ticker: tData.symbol,
-    cik: cik,
-    shares: shrsOuts,
-    soDate: soDate,
+    // cik: cik,
+    // shares: shrsOuts,
+    // soDate: soDate,
+    shares: extract('ic', 'shrs'),
     endDate: tData.endDate,
     cash: extract('bs', 'cash'),
     debt: extract('bs', 'debt'),
