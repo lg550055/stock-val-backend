@@ -16,6 +16,7 @@ const stockSchema = new Schema({
     endDate: Date,
     rev: Number,
     ebit: Number,
+    eps: Number,
     da: Number,
     cfo: Number,
     capex: Number,

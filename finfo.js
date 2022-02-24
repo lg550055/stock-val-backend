@@ -6,6 +6,7 @@ const axios = require('axios');
 // not all companies use the same tags to identify their financial information, thus the need to have multiple tags for the same financial metric
 const items = {
   shrs: ['WeightedAverageNumberOfDilutedSharesOutstanding'],
+  eps: ['EarningsPerShareDiluted','IncomeLossFromContinuingOperationsNetOfTaxPerOutstandingLimitedPartnershipUnitDiluted','NetIncomeLossNetOfTaxPerOutstandingLimitedPartnershipUnitDiluted'],
   cash: ['CashAndCashEquivalentsAtCarryingValue','MarketableSecuritiesCurrent','ShortTermInvestments','CashCashEquivalentsAndShortTermInvestments','AvailableForSaleSecuritiesNoncurrent','MarketableSecuritiesNoncurrent','CashCashEquivalentsRestrictedCashAndRestrictedCashEquivalents','AvailableForSaleSecuritiesDebtSecuritiesCurrent','AvailableForSaleSecuritiesDebtSecuritiesNoncurrent','CashCashEquivalentsRestrictedCashAndRestrictedCashEquivalentsIncludingDisposalGroupAndDiscontinuedOperations','DebtSecuritiesAvailableForSaleExcludingAccruedInterestCurrent'],
   debt: ['DebtCurrent','ShortTermBorrowings','CommercialPaper','LongTermDebt','LongTermDebtAndCapitalLeaseObligationsCurrent','LongTermDebtCurrent','LongTermDebtNoncurrent','LongTermDebtAndCapitalLeaseObligations','FinanceLeaseLiabilityCurrent','FinanceLeaseLiabilityNoncurrent'],
   rev: ['Revenues','RevenueFromContractWithCustomerExcludingAssessedTax'],
@@ -53,6 +54,7 @@ async function getInfo (symbol) {
       endDate: tData.endDate,
       rev: extract('ic', 'rev'),
       ebit: extract('ic', 'ebit'),
+      eps: extract('ic', 'eps')*1e9,
       da: extract('cf', 'da'),
       cfo: extract('cf', 'cfo'),
       capex: extract('cf', 'capex')
